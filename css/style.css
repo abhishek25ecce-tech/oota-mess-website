@@ -1,0 +1,274 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f4f7fb;
+    color:#333;
+}
+
+header{
+    background:#0f766e;
+    color:white;
+    text-align:center;
+    padding:30px 20px;
+}
+
+header h1{
+    font-size:2.5rem;
+}
+
+header p{
+    margin-top:8px;
+    font-size:1.1rem;
+}
+
+nav{
+    background:white;
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    padding:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+nav a{
+    text-decoration:none;
+    color:#0f766e;
+    font-weight:600;
+}
+
+.today{
+    max-width:1000px;
+    margin:40px auto;
+    padding:20px;
+}
+
+.today h2{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h3{
+    color:#0f766e;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:1rem;
+    line-height:1.6;
+}
+.card ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.card li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+#menuMessage {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+/* Weekly Menu - Collapsible Days */
+
+.day-card {
+    background: white;
+    margin: 15px 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.day-header {
+    width: 100%;
+    padding: 18px 20px;
+    border: none;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: left;
+}
+
+.day-header:hover {
+    background: #f5f7f8;
+}
+
+.arrow {
+    font-size: 16px;
+}
+
+.day-content {
+    display: none;
+    padding: 5px 25px 20px;
+}
+
+.day-content.open {
+    display: block;
+}
+
+.day-content h3 {
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+.day-content ul {
+    margin-top: 5px;
+    padding-left: 25px;
+}
+/* Weekly Menu - Attractive Accordion */
+
+.day-card {
+    background: white;
+    margin: 15px 20px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.day-header {
+    width: 100%;
+    border: none;
+    background: #ffffff;
+    padding: 18px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: #117c73;
+}
+
+.day-header:hover {
+    background: #f1f8f7;
+}
+
+.arrow {
+    font-size: 20px;
+}
+
+.day-content {
+    display: none;
+    padding: 5px 20px 20px;
+}
+
+.day-content.open {
+    display: block;
+}
+
+.day-content h3 {
+    color: #117c73;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+/* ============================= */
+/* MOBILE RESPONSIVE DESIGN      */
+/* ============================= */
+
+@media (max-width: 600px) {
+
+    body {
+        margin: 0;
+        font-size: 15px;
+    }
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 34px;
+        margin-bottom: 8px;
+    }
+
+    header p {
+        font-size: 16px;
+    }
+
+    nav {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        padding: 14px 8px;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    main {
+        padding: 20px 12px;
+    }
+
+    .today {
+        padding: 0;
+    }
+
+    .card {
+        padding: 18px;
+        margin-bottom: 16px;
+        border-radius: 16px;
+    }
+
+    .card h3 {
+        font-size: 19px;
+        margin-top: 0;
+    }
+
+    /* Weekly menu */
+
+    #weeklyMenu {
+        padding: 0;
+    }
+
+    .day-card {
+        margin-bottom: 12px;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .day-header {
+        width: 100%;
+        padding: 16px;
+        font-size: 16px;
+    }
+
+    .day-content {
+        padding: 16px;
+    }
+
+    .day-content h3 {
+        font-size: 16px;
+        margin-top: 12px;
+    }
+
+    .day-content ul {
+        padding-left: 20px;
+    }
+}
