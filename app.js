@@ -214,3 +214,157 @@ function showWeeklyMenu(menu) {
         container.appendChild(card);
     });
 }
+// =========================
+// TODAY'S DATE + MEAL STATUS
+// =========================
+
+function updateHomeStatus() {
+
+    const now = new Date();
+
+    // Show today's date
+    const todayDate = document.getElementById("todayDate");
+
+    if (todayDate) {
+        todayDate.textContent = now.toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long"
+        });
+    }
+
+    const homeStatus = document.getElementById("homeStatus");
+
+    if (!homeStatus) return;
+
+    const meals = [
+        {
+            name: "🍳 Breakfast",
+            start: "07:00",
+            end: "09:30"
+        },
+        {
+            name: "🍛 Lunch",
+            start: "12:00",
+            end: "14:30"
+        },
+        {
+            name: "☕ Hi-Tea",
+            start: "16:30",
+            end: "18:15"
+        },
+        {
+            name: "🌙 Dinner",
+            start: "19:00",
+            end: "21:30"
+        }
+    ];
+
+    function getMealTime(time) {
+        const [hours, minutes] = time.split(":").map(Number);
+
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+
+        return date;
+    }
+
+    function formatTime(milliseconds) {
+        const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        if (hours > 0) {
+            return `${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        return `${minutes}m ${seconds}s`;
+    }
+
+    const currentMeal = meals.find(meal => {
+        const start = getMealTime(meal.start);
+        const end = getMealTime(meal.end);
+
+        return now >= start && now < end;
+    });
+
+    if (currentMeal) {
+
+        const end = getMealTime(currentMeal.end);
+
+        homeStatus.innerHTML = `
+            <span>🟢 ${currentMeal.name} IS OPEN</span>
+            <strong>Closes in ${formatTime(end - now)}</strong>
+        `;
+
+    } else {
+
+        let nextMeal = meals.find(meal => {
+            return getMealTime(meal.start) > now;
+        });
+
+        if (!nextMeal) {
+            nextMeal = meals[0];
+
+            const tomorrowStart = getMealTime(nextMeal.start);
+            tomorrowStart.setDate(tomorrowStart.getDate() + 1);
+
+            homeStatus.innerHTML = `
+                <span>🍽 NEXT MEAL: ${nextMeal.name}</span>
+                <strong>Starts in ${formatTime(tomorrowStart - now)}</strong>
+            `;
+
+        } else {
+
+            const start = getMealTime(nextMeal.start);
+
+            homeStatus.innerHTML = `
+                <span>🍽 NEXT MEAL: ${nextMeal.name}</span>
+                <strong>Starts in ${formatTime(start - now)}</strong>
+            `;
+        }
+    }
+}
+
+function highlightCurrentMeal() {
+
+    const now = new Date();
+
+    const meals = [
+        { card: "breakfastCard", start: "07:00", end: "09:30" },
+        { card: "lunchCard", start: "12:00", end: "14:30" },
+        { card: "snacksCard", start: "16:30", end: "18:15" },
+        { card: "dinnerCard", start: "19:00", end: "21:30" }
+    ];
+
+    // Remove highlight from all cards first
+    meals.forEach(meal => {
+        const card = document.getElementById(meal.card);
+        if (card) card.classList.remove("active-meal");
+    });
+
+    // Highlight the currently open meal
+    meals.forEach(meal => {
+        const [startHour, startMinute] = meal.start.split(":").map(Number);
+        const [endHour, endMinute] = meal.end.split(":").map(Number);
+
+        const start = new Date();
+        start.setHours(startHour, startMinute, 0, 0);
+
+        const end = new Date();
+end.setHours(endHour, endMinute, 0, 0);
+        if (now >= start && now < end) {
+            const card = document.getElementById(meal.card);
+            if (card) card.classList.add("active-meal");
+        }
+    });
+}
+
+updateHomeStatus();
+highlightCurrentMeal();
+
+setInterval(() => {
+    updateHomeStatus();
+    highlightCurrentMeal();
+}, 1000);

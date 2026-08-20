@@ -439,3 +439,57 @@ nav a{
     font-size: 17px;
     font-weight: 600;
 }
+/* TODAY'S MENU DATE */
+
+.today-date {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.7;
+    margin-top: -8px;
+    margin-bottom: 18px;
+}
+
+
+/* LIVE MEAL STATUS */
+
+.home-status {
+    background: white;
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin: 0 auto 25px;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 2px solid #f0f0f0;
+}
+
+.home-status span {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.home-status strong {
+    display: block;
+    font-size: 22px;
+}
+/* CURRENTLY ACTIVE MEAL */
+
+.card.active-meal {
+    border: 2px solid #2e7d32;
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.18);
+    position: relative;
+}
+
+.card.active-meal::before {
+    content: "🟢 CURRENTLY SERVING";
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #2e7d32;
+    letter-spacing: 0.5px;
+}
