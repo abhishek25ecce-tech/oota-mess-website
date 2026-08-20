@@ -300,3 +300,142 @@ nav a{
     align-items: center;
     gap: 10px;
 }
+/* =========================
+   MEAL TIMINGS PAGE
+========================= */
+
+.timing-card {
+    background: white;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+.timing-card h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.meal-time {
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.7;
+    margin-bottom: 18px;
+}
+
+.meal-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+}
+
+.meal-status .status {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.meal-status strong {
+    font-size: 25px;
+}
+
+/* OPEN MEAL */
+.timing-card.meal-open {
+    border-color: #2e7d32;
+    transform: scale(1.02);
+}
+
+.status.open {
+    color: #2e7d32;
+}
+
+/* UPCOMING MEAL */
+.status.pending {
+    color: #d97706;
+}
+
+/* CLOSED MEAL */
+.status.closed {
+    color: #c62828;
+    opacity: 0.8;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .timing-card {
+        padding: 18px;
+    }
+
+    .timing-card h3 {
+        font-size: 20px;
+    }
+
+    .meal-status strong {
+        font-size: 22px;
+    }
+}
+/* LIVE CURRENT TIME */
+
+.current-time-box {
+    background: white;
+    border-radius: 16px;
+    padding: 15px 20px;
+    margin: 15px auto 25px;
+    max-width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.current-time-box span {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.65;
+    margin-bottom: 5px;
+}
+
+.current-time-box strong {
+    display: block;
+    font-size: 26px;
+    font-weight: 700;
+}
+/* NEXT MEAL BOX */
+
+.next-meal-box {
+    background: white;
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin: 0 auto 28px;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 2px solid #f0f0f0;
+}
+
+.next-meal-box span {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.65;
+    margin-bottom: 7px;
+}
+
+.next-meal-box strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.next-meal-box p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+}

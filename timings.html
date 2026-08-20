@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meal Timings | Oota</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+    <h1>🍽 Oota</h1>
+    <p>Azim Premji University</p>
+</header>
+
+<nav>
+    <a href="index.html">Today's Menu</a>
+    <a href="weekly.html">Weekly Menu</a>
+    <a href="timings.html">Meal Timings</a>
+</nav>
+
+<section class="today">
+
+    <h2>Meal Timings</h2>
+<div class="current-time-box">
+        <span>🕒 Current Time</span>
+        <strong id="currentTime">Loading...</strong>
+    </div>
+<div class="next-meal-box">
+    <span>🍽 NEXT MEAL</span>
+    <strong id="nextMealName">Loading...</strong>
+    <p id="nextMealCountdown">Calculating...</p>
+</div>
+    <div class="timing-card" data-start="07:00" data-end="09:30">
+        <h3>🍳 Breakfast</h3>
+        <p class="meal-time">7:00 AM – 9:30 AM</p>
+        <div class="meal-status"></div>
+    </div>
+
+    <div class="timing-card" data-start="12:00" data-end="14:30">
+        <h3>🍛 Lunch</h3>
+        <p class="meal-time">12:00 PM – 2:30 PM</p>
+        <div class="meal-status"></div>
+    </div>
+
+    <div class="timing-card" data-start="16:30" data-end="18:15">
+        <h3>☕ Snacks</h3>
+        <p class="meal-time">4:30 PM – 6:15 PM</p>
+        <div class="meal-status"></div>
+    </div>
+
+    <div class="timing-card" data-start="19:00" data-end="21:30">
+        <h3>🌙 Dinner</h3>
+        <p class="meal-time">7:00 PM – 9:30 PM</p>
+        <div class="meal-status"></div>
+    </div>
+
+</section>
+
+<script>
+function getTimeToday(timeString) {
+    const [hours, minutes] = timeString.split(":").map(Number);
+
+    const time = new Date();
+    time.setHours(hours, minutes, 0, 0);
+
+    return time;
+}
+
+function formatRemaining(milliseconds) {
+    if (milliseconds <= 0) return "0 min";
+
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    return `${minutes}m ${seconds}s`;
+}
+
+function updateMealTimers() {
+
+    const now = new Date();
+
+    document.querySelectorAll(".timing-card").forEach(card => {
+
+        const start = getTimeToday(card.dataset.start);
+        const end = getTimeToday(card.dataset.end);
+
+        const status = card.querySelector(".meal-status");
+
+        if (now < start) {
+
+            status.innerHTML = `
+                <span class="status pending">⏳ STARTS IN</span>
+                <strong>${formatRemaining(start - now)}</strong>
+            `;
+
+            card.classList.remove("meal-open");
+            card.classList.add("meal-pending", "meal-closed");
+
+        } else if (now >= start && now < end) {
+
+            status.innerHTML = `
+                <span class="status open">🟢 OPEN NOW</span>
+                <strong>Closes in ${formatRemaining(end - now)}</strong>
+            `;
+
+            card.classList.remove("meal-pending", "meal-closed");
+            card.classList.add("meal-open");
+
+        } else {
+
+            status.innerHTML = `
+                <span class="status closed">🔴 CLOSED</span>
+                <strong>Meal service has ended</strong>
+            `;
+
+            card.classList.remove("meal-pending", "meal-open");
+            card.classList.add("meal-closed");
+        }
+
+    });
+}
+
+function updateCurrentTime() {
+    const now = new Date();
+
+    document.getElementById("currentTime").textContent =
+        now.toLocaleTimeString("en-IN", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        });
+}
+
+function updateNextMeal() {
+
+    const now = new Date();
+
+    const meals = [
+        { name: "🍳 Breakfast", start: getTimeToday("07:00") },
+        { name: "🍛 Lunch", start: getTimeToday("12:00") },
+        { name: "☕ Snacks", start: getTimeToday("16:30") },
+        { name: "🌙 Dinner", start: getTimeToday("19:00") }
+    ];
+
+    let nextMeal = meals.find(meal => meal.start > now);
+
+    if (!nextMeal) {
+        nextMeal = {
+            name: "🍳 Breakfast",
+            start: getTimeToday("07:00")
+        };
+
+        nextMeal.start.setDate(nextMeal.start.getDate() + 1);
+    }
+
+    document.getElementById("nextMealName").textContent =
+        nextMeal.name;
+
+    document.getElementById("nextMealCountdown").textContent =
+        `Starts in ${formatRemaining(nextMeal.start - now)}`;
+}
+
+
+updateMealTimers();
+updateCurrentTime();
+updateNextMeal();
+
+setInterval(() => {
+    updateMealTimers();
+    updateCurrentTime();
+    updateNextMeal();
+}, 1000);
+</script>
+
+</body>
+</html>
