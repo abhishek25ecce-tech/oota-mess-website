@@ -1,3 +1,4 @@
+const VIBE_API_URL = "https://script.google.com/macros/s/AKfycbwyR8hnP5n7TEY2H4JoD_CsWM-2t5e1Ob1LMtTYquUj2neEi4rLXDnIDAawgH8iGAk-pA/exec";
 const MENU_API_URL = "https://script.google.com/macros/s/AKfycbyTF2bHlmsw8-cbEowsXuMADjr8UJC3CranpNLQtnxYTQrJ7eC_BkCcRjzEVf4ckMmt/exec";
 
 function getFoodType(food) {
@@ -368,3 +369,163 @@ setInterval(() => {
     updateHomeStatus();
     highlightCurrentMeal();
 }, 1000);
+// =========================
+// FOOD VIBE - LIVE REACTIONS
+// =========================
+
+const vibeButtons = document.querySelectorAll(".vibe-emojis button");
+const dominantVibe = document.getElementById("dominantVibe");
+
+function getCurrentMeal() {
+    const now = new Date();
+
+    const meals = [
+        { name: "Breakfast", start: "07:00", end: "09:30" },
+        { name: "Lunch", start: "12:00", end: "14:30" },
+        { name: "Snacks", start: "16:30", end: "18:15" },
+        { name: "Dinner", start: "19:00", end: "21:30" }
+    ];
+
+    for (const meal of meals) {
+
+        const [startHour, startMinute] = meal.start.split(":").map(Number);
+        const [endHour, endMinute] = meal.end.split(":").map(Number);
+
+        const start = new Date();
+        start.setHours(startHour, startMinute, 0, 0);
+
+        const end = new Date();
+        end.setHours(endHour, endMinute, 0, 0);
+
+        if (now >= start && now < end) {
+            return meal.name;
+        }
+    }
+
+    return null;
+}
+
+
+// =========================
+// EMOJI CLICK + ONE VOTE PER MEAL
+// =========================
+
+vibeButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const currentMeal = getCurrentMeal();
+
+        if (!currentMeal) {
+            alert("Food reactions are available during meal time.");
+            return;
+        }
+
+        const emoji = button.dataset.vibe;
+
+        // Today's date
+        const today = new Date().toLocaleDateString("en-CA");
+
+        // Unique key for this device, date and meal
+        const voteKey = `foodVibe_${today}_${currentMeal}`;
+
+        // Check if this browser has already voted
+        if (localStorage.getItem(voteKey)) {
+            alert("You have already shared your food vibe for this meal 😊");
+            return;
+        }
+
+        button.disabled = true;
+
+        fetch(VIBE_API_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                date: today,
+                meal: currentMeal,
+                emoji: emoji
+            })
+        })
+        .then(() => {
+
+            // Save that this device has voted
+            localStorage.setItem(voteKey, emoji);
+
+            vibeButtons.forEach(btn => {
+                btn.classList.remove("selected-vibe");
+            });
+
+            button.classList.add("selected-vibe");
+
+            // Temporarily show selected emoji
+            if (dominantVibe) {
+                dominantVibe.textContent = emoji;
+            }
+
+            // Reload actual dominant emoji
+            setTimeout(loadFoodVibe, 1000);
+        })
+        .catch(error => {
+            console.error("Food vibe error:", error);
+            alert("Could not save your reaction. Please try again.");
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
+
+    });
+});
+
+
+// =========================
+// LOAD DOMINANT FOOD VIBE
+// =========================
+
+function loadFoodVibe() {
+
+    const currentMeal = getCurrentMeal();
+
+    if (!currentMeal || !dominantVibe) return;
+
+    const today = new Date().toLocaleDateString("en-CA");
+
+    fetch(
+        `${VIBE_API_URL}?date=${encodeURIComponent(today)}&meal=${encodeURIComponent(currentMeal)}`
+    )
+    .then(response => response.json())
+    .then(reactions => {
+
+        let dominantEmoji = null;
+        let highestCount = 0;
+
+        Object.entries(reactions).forEach(([emoji, count]) => {
+
+            if (count > highestCount) {
+                dominantEmoji = emoji;
+                highestCount = count;
+            }
+
+        });
+
+        if (dominantEmoji) {
+            dominantVibe.textContent = dominantEmoji;
+        }
+
+    })
+    .catch(error => {
+        console.error("Could not load food vibe:", error);
+    });
+}
+
+
+// =========================
+// START FOOD VIBE SYSTEM
+// =========================
+
+loadFoodVibe();
+
+// Refresh every 10 seconds
+setInterval(loadFoodVibe, 10000);

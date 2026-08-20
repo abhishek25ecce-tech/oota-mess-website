@@ -493,3 +493,186 @@ nav a{
     color: #2e7d32;
     letter-spacing: 0.5px;
 }
+/* FOOD VIBE */
+
+.food-vibe-box {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 0 auto 28px;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.dominant-vibe {
+    font-size: 55px;
+    line-height: 1;
+    margin-bottom: 8px;
+    animation: vibePulse 2s infinite;
+}
+
+.vibe-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.65;
+    margin-bottom: 14px;
+}
+
+.vibe-emojis {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.vibe-emojis button {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 4px;
+}
+
+.vibe-emojis button:hover {
+    transform: scale(1.25);
+}
+
+@keyframes vibePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .dominant-vibe {
+        font-size: 48px;
+    }
+
+    .vibe-emojis button {
+        font-size: 25px;
+    }
+}
+.vibe-emojis button.selected-vibe {
+    transform: scale(1.3);
+    background: #f5f5f5;
+    border-radius: 50%;
+}
+/* =========================
+   FOOD VIBE - NEW DESIGN
+========================= */
+
+.food-vibe-box {
+    background: white;
+    border-radius: 24px;
+    padding: 22px 20px 18px;
+    margin: 0 auto 30px;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.vibe-heading {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    opacity: 0.65;
+    margin-bottom: 14px;
+}
+
+.dominant-vibe-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.dominant-vibe {
+    width: 92px;
+    height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 58px;
+    border-radius: 50%;
+    background: #f8f8f8;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+    animation: vibeFloat 3s ease-in-out infinite;
+}
+
+.vibe-message {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.vibe-emojis {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.vibe-emojis button {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #f7f7f7;
+    font-size: 26px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vibe-emojis button:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.vibe-emojis button.selected-vibe {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+.vibe-emojis button:disabled {
+    cursor: default;
+    opacity: 0.55;
+}
+
+.vibe-hint {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 4px;
+}
+
+@keyframes vibeFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@media (max-width: 480px) {
+
+    .vibe-emojis {
+        gap: 6px;
+    }
+
+    .vibe-emojis button {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+    }
+}
