@@ -272,3 +272,31 @@ nav a{
         padding-left: 20px;
     }
 }
+.food-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.food-tag.veg {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+}
+
+.food-tag.nonveg {
+    background-color: #ffe5e5;
+    color: #c62828;
+}
+
+/* Keep food name and tag nicely aligned */
+.card li,
+.day-content li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}

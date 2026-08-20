@@ -1,5 +1,50 @@
 const MENU_API_URL = "https://script.google.com/macros/s/AKfycbyTF2bHlmsw8-cbEowsXuMADjr8UJC3CranpNLQtnxYTQrJ7eC_BkCcRjzEVf4ckMmt/exec";
 
+function getFoodType(food) {
+    const nonVegKeywords = [
+        "CHICKEN",
+        "EGG",
+        "MUTTON",
+        "FISH",
+        "PRAWN",
+        "MEAT"
+    ];
+
+    const foodUpper = food.toUpperCase();
+
+    return nonVegKeywords.some(keyword => foodUpper.includes(keyword))
+        ? "nonveg"
+        : "veg";
+}
+function getFoodTypes(food) {
+    const nonVegKeywords = [
+        "CHICKEN",
+        "EGG",
+        "MUTTON",
+        "FISH",
+        "PRAWN",
+        "MEAT"
+    ];
+
+    const foodUpper = food.toUpperCase();
+
+    const hasNonVeg = nonVegKeywords.some(keyword =>
+        foodUpper.includes(keyword)
+    );
+
+    // If food contains "/" and has a non-veg item,
+    // show both VEG and NON-VEG tags
+    if (foodUpper.includes("/") && hasNonVeg) {
+        return ["veg", "nonveg"];
+    }
+
+    if (hasNonVeg) {
+        return ["nonveg"];
+    }
+
+    return ["veg"];
+}
+
 function formatMenuItems(items) {
     if (!items || items.length === 0) {
         return "<p>No menu available.</p>";
@@ -7,13 +52,27 @@ function formatMenuItems(items) {
 
     return `
         <ul>
-            ${items.map(item => `
-                <li>${item.food}</li>
-            `).join("")}
+            ${items.map(item => {
+
+                const types = getFoodTypes(item.food);
+
+                const tags = types.map(type =>
+                    type === "veg"
+                        ? '<span class="food-tag veg">VEG</span>'
+                        : '<span class="food-tag nonveg">NON-VEG</span>'
+                ).join("");
+
+                return `
+                    <li>
+                        <span>${item.food}</span>
+                        <span class="food-tags">${tags}</span>
+                    </li>
+                `;
+
+            }).join("")}
         </ul>
     `;
 }
-
 fetch(MENU_API_URL)
     .then(response => response.json())
     .then(menu => {
