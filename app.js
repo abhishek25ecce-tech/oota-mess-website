@@ -1,64 +1,82 @@
-function formatMenu(menu) {
-    return "<ul><li>" +
-        menu
-            .split(/\r?\n/)
-            .filter(item => item.trim() !== "")
-            .join("</li><li>") +
-        "</li></ul>";
-}
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSZBH-lXekEeA3Ybv6KzEhtaWcn0r3Lbrr16iiABZO5w1MGi7vzr8_-qSoyCXDie5aYM5Ta7dVEbrn_/pub?output=csv";
+const MENU_API_URL = "https://script.google.com/macros/s/AKfycbyTF2bHlmsw8-cbEowsXuMADjr8UJC3CranpNLQtnxYTQrJ7eC_BkCcRjzEVf4ckMmt/exec";
 
-Papa.parse(CSV_URL, {
-    download: true,
-    header: true,
-    complete: function(results) {
-    const menu = results.data;
-
-    const today = new Date().toISOString().split("T")[0];
-
- const todayMenu = menu.find(item => item.Date === today);
-
-// Today's Menu page
-if (document.getElementById("todayMessage")) {
-
-    if (!todayMenu || (!todayMenu.Breakfast && !todayMenu.Lunch && !todayMenu.Snacks && !todayMenu.Dinner)) {
-
-        document.getElementById("todayMessage").innerHTML =
-            "Today's menu has not been updated yet.";
-
-        document.getElementById("breakfast").innerHTML = "";
-        document.getElementById("lunch").innerHTML = "";
-        document.getElementById("snacks").innerHTML = "";
-        document.getElementById("dinner").innerHTML = "";
-
-        return;
+function formatMenuItems(items) {
+    if (!items || items.length === 0) {
+        return "<p>No menu available.</p>";
     }
 
-    document.getElementById("breakfast").innerHTML =
-        formatMenu(todayMenu.Breakfast);
-
-    document.getElementById("lunch").innerHTML =
-        formatMenu(todayMenu.Lunch);
-
-    document.getElementById("snacks").innerHTML =
-        formatMenu(todayMenu.Snacks);
-
-    document.getElementById("dinner").innerHTML =
-        formatMenu(todayMenu.Dinner);
+    return `
+        <ul>
+            ${items.map(item => `
+                <li>${item.food}</li>
+            `).join("")}
+        </ul>
+    `;
 }
 
+fetch(MENU_API_URL)
+    .then(response => response.json())
+    .then(menu => {
 
-// Weekly Menu page
-if (document.getElementById("weeklyMenu")) {
-    showWeeklyMenu(menu);
-}
-    }
-});
-if (document.getElementById("weeklyMenu")) {
+        // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split("T")[0];
+        const todayMenu = menu[today];
 
-    console.log("Weekly page detected");
+        // =========================
+        // TODAY'S MENU PAGE
+        // =========================
 
-}
+        if (document.getElementById("menuMessage")) {
+
+            if (!todayMenu) {
+
+                document.getElementById("menuMessage").innerHTML =
+                    "Today's menu has not been updated yet.";
+
+                document.getElementById("breakfast").innerHTML = "";
+                document.getElementById("lunch").innerHTML = "";
+                document.getElementById("snacks").innerHTML = "";
+                document.getElementById("dinner").innerHTML = "";
+
+            } else {
+
+                document.getElementById("menuMessage").innerHTML = "";
+
+                document.getElementById("breakfast").innerHTML =
+                    formatMenuItems(todayMenu.breakfast);
+
+                document.getElementById("lunch").innerHTML =
+                    formatMenuItems(todayMenu.lunch);
+
+                // Your existing website uses the ID "snacks"
+                // but it will now display Hi-Tea
+                document.getElementById("snacks").innerHTML =
+                    formatMenuItems(todayMenu.hiTea);
+
+                document.getElementById("dinner").innerHTML =
+                    formatMenuItems(todayMenu.dinner);
+            }
+        }
+
+        // =========================
+        // WEEKLY MENU PAGE
+        // =========================
+
+        if (document.getElementById("weeklyMenu")) {
+            showWeeklyMenu(menu);
+        }
+
+    })
+    .catch(error => {
+        console.error("Menu loading error:", error);
+
+        if (document.getElementById("menuMessage")) {
+            document.getElementById("menuMessage").innerHTML =
+                "Unable to load the menu. Please try again later.";
+        }
+    });
+
+
 function showWeeklyMenu(menu) {
 
     const container = document.getElementById("weeklyMenu");
@@ -67,30 +85,43 @@ function showWeeklyMenu(menu) {
 
     container.innerHTML = "";
 
-    menu.forEach((day, index) => {
+    // Sort dates properly
+    const dates = Object.keys(menu).sort();
+
+    dates.forEach(date => {
+
+        const day = menu[date];
+
+        const formattedDate = new Date(
+            date + "T12:00:00"
+        ).toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "short"
+        });
 
         const card = document.createElement("div");
         card.className = "day-card";
 
         card.innerHTML = `
             <button class="day-header">
-                <span>📅 ${day.Date}</span>
+                <span>📅 ${formattedDate}</span>
                 <span class="arrow">▼</span>
             </button>
 
             <div class="day-content">
 
                 <h3>🍳 Breakfast</h3>
-                ${formatMenu(day.Breakfast)}
+                ${formatMenuItems(day.breakfast)}
 
                 <h3>🍛 Lunch</h3>
-                ${formatMenu(day.Lunch)}
+                ${formatMenuItems(day.lunch)}
 
-                <h3>🍪 Snacks</h3>
-                ${formatMenu(day.Snacks)}
+                <h3>☕ Hi-Tea</h3>
+                ${formatMenuItems(day.hiTea)}
 
                 <h3>🌙 Dinner</h3>
-                ${formatMenu(day.Dinner)}
+                ${formatMenuItems(day.dinner)}
 
             </div>
         `;
@@ -103,18 +134,22 @@ function showWeeklyMenu(menu) {
 
             // Close other open days
             document.querySelectorAll(".day-content.open").forEach(openContent => {
+
                 if (openContent !== content) {
                     openContent.classList.remove("open");
+
                     openContent.previousElementSibling
                         .querySelector(".arrow").textContent = "▼";
                 }
+
             });
 
             content.classList.toggle("open");
 
-            arrow.textContent = content.classList.contains("open")
-                ? "▲"
-                : "▼";
+            arrow.textContent =
+                content.classList.contains("open")
+                    ? "▲"
+                    : "▼";
         });
 
         container.appendChild(card);
