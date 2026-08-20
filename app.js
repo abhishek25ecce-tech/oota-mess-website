@@ -375,7 +375,23 @@ setInterval(() => {
 
 const vibeButtons = document.querySelectorAll(".vibe-emojis button");
 const dominantVibe = document.getElementById("dominantVibe");
+const vibeMessage = document.getElementById("vibeMessage");
 
+function updateVibeMessage(emoji) {
+
+    if (!vibeMessage) return;
+
+    const messages = {
+        "😍": "Absolutely loved it!",
+        "😋": "Looking good!",
+        "🙂": "Pretty decent!",
+        "😐": "Mixed vibes!",
+        "😕": "Could be better!"
+    };
+
+    vibeMessage.textContent =
+        messages[emoji] || "Share your food vibe!";
+}
 function getCurrentMeal() {
     const now = new Date();
 
@@ -512,6 +528,7 @@ function loadFoodVibe() {
 
         if (dominantEmoji) {
             dominantVibe.textContent = dominantEmoji;
+            updateVibeMessage(emoji);
         }
 
     })
