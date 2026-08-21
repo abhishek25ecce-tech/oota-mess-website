@@ -843,3 +843,103 @@ nav a{
     background: #222;
     color: white;
 }
+/* =========================
+   MOBILE TIMER FIX
+========================= */
+
+/* Prevent SVG circles from becoming filled */
+.timer-svg circle {
+    fill: none !important;
+}
+
+/* Keep timer at a fixed, responsive size */
+.meal-progress-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.meal-timer-circle {
+    width: 170px !important;
+    height: 170px !important;
+    min-width: 170px !important;
+    min-height: 170px !important;
+    max-width: 170px !important;
+    max-height: 170px !important;
+    position: relative;
+    margin: 10px auto 0;
+}
+
+.timer-svg {
+    width: 170px !important;
+    height: 170px !important;
+    display: block;
+}
+
+.timer-bg {
+    fill: none !important;
+    stroke: #e5e7eb !important;
+    stroke-width: 8 !important;
+}
+
+.timer-progress {
+    fill: none !important;
+    stroke: #2e7d32 !important;
+    stroke-width: 8 !important;
+    stroke-linecap: round;
+}
+
+/* Keep timer content centered */
+.timer-content {
+    position: absolute !important;
+    inset: 0 !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* =========================
+   NOTIFICATION CARD FIX
+========================= */
+
+.notification-card {
+    width: calc(100% - 32px);
+    max-width: 380px;
+    box-sizing: border-box;
+    margin: 18px auto 22px;
+    padding: 14px 16px;
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+}
+
+.notification-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-text strong,
+.notification-text span {
+    display: block;
+}
+
+.notification-toggle {
+    flex-shrink: 0;
+}
