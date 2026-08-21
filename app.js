@@ -875,3 +875,20 @@ if (notificationToggle) {
 
 // Set correct state when page loads
 updateNotificationUI();
+// =========================
+// COLLAPSIBLE MEAL CARDS
+// =========================
+
+const mealCards = document.querySelectorAll(".meal-card");
+
+mealCards.forEach(card => {
+
+    const header = card.querySelector(".meal-card-header");
+
+    header.addEventListener("click", () => {
+
+        card.classList.toggle("open");
+
+    });
+
+});

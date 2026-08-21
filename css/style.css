@@ -26,21 +26,82 @@ header p{
     font-size:1.1rem;
 }
 
-nav{
-    background:white;
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    padding:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+/* =========================
+   GLASS NAVIGATION
+========================= */
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 12px;
+
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
 }
 
-nav a{
-    text-decoration:none;
-    color:#0f766e;
-    font-weight:600;
+nav a {
+    text-decoration: none;
+    color: #245f5b;
+    font-weight: 600;
+    font-size: 15px;
+
+    padding: 10px 14px;
+    border-radius: 14px;
+
+    transition: 
+        background 0.25s ease,
+        transform 0.25s ease;
 }
 
+nav a:hover {
+    background: rgba(255, 255, 255, 0.55);
+    transform: translateY(-1px);
+}
+
+nav a:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 600px) {
+
+    nav {
+        justify-content: space-around;
+        gap: 2px;
+        padding: 8px 5px;
+    }
+
+    nav a {
+        font-size: 13px;
+        padding: 9px 8px;
+        white-space: nowrap;
+    }
+}
+/* =========================
+   SUBTLE GLASS CARDS
+========================= */
+
+.card,
+.food-vibe-box,
+.notification-card,
+.home-status {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.55);
+}
 .today{
     max-width:1000px;
     margin:40px auto;
@@ -860,4 +921,49 @@ nav a{
 
 .notification-toggle {
     flex-shrink: 0;
+}
+/* =========================
+   COLLAPSIBLE MEAL CARDS
+========================= */
+
+.meal-card {
+    cursor: pointer;
+}
+
+.meal-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.meal-card-header h3 {
+    margin: 0;
+}
+
+.meal-arrow {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+/* Hidden by default */
+.meal-card-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        max-height 0.35s ease,
+        opacity 0.25s ease,
+        margin 0.3s ease;
+}
+
+/* Open state */
+.meal-card.open .meal-card-content {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 12px;
+}
+
+/* Rotate arrow */
+.meal-card.open .meal-arrow {
+    transform: rotate(180deg);
 }
