@@ -550,3 +550,202 @@ loadFoodVibe();
 
 // Refresh every 10 seconds
 setInterval(loadFoodVibe, 10000);
+// =========================
+// LIVE CIRCULAR MEAL TIMER
+// =========================
+
+const mealProgressContainer = document.getElementById("mealProgressContainer");
+const mealProgressBar = document.getElementById("mealProgressBar");
+const mealProgressPercent = document.getElementById("mealProgressPercent");
+const mealProgressLabel = document.getElementById("mealProgressLabel");
+const timerEmoji = document.getElementById("timerEmoji");
+const timerReaction = document.getElementById("timerReaction");
+const timerMessageTitle = document.getElementById("timerMessageTitle");
+
+function formatMealCountdown(milliseconds) {
+
+    if (milliseconds <= 0) {
+        return "00:00";
+    }
+
+    const totalSeconds = Math.floor(milliseconds / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+    }
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+
+function updateCircularMealTimer() {
+
+    // Safety check
+    if (!mealProgressContainer) return;
+
+    const now = new Date();
+
+    const meals = [
+        {
+            name: "Breakfast",
+            start: "07:00",
+            end: "09:30",
+            emoji: "🍳"
+        },
+        {
+            name: "Lunch",
+            start: "12:00",
+            end: "14:30",
+            emoji: "🍛"
+        },
+        {
+            name: "Snacks",
+            start: "16:30",
+            end: "18:15",
+            emoji: "☕"
+        },
+        {
+            name: "Dinner",
+            start: "19:00",
+            end: "21:30",
+            emoji: "🌙"
+        }
+    ];
+
+    let activeMeal = null;
+    let startTime;
+    let endTime;
+
+    meals.forEach(meal => {
+
+        const [startHour, startMinute] =
+            meal.start.split(":").map(Number);
+
+        const [endHour, endMinute] =
+            meal.end.split(":").map(Number);
+
+        const start = new Date();
+        start.setHours(startHour, startMinute, 0, 0);
+
+        const end = new Date();
+        end.setHours(endHour, endMinute, 0, 0);
+
+        if (now >= start && now < end) {
+            activeMeal = meal;
+            startTime = start;
+            endTime = end;
+        }
+
+    });
+
+
+    // No meal is currently open
+    if (!activeMeal) {
+
+        mealProgressContainer.style.display = "none";
+
+        return;
+    }
+
+
+    // Show timer
+    mealProgressContainer.style.display = "flex";
+
+
+    // Calculate timing
+    const totalTime = endTime - startTime;
+    const remainingTime = endTime - now;
+
+    const remainingPercent = remainingTime / totalTime;
+
+
+    // =========================
+    // UPDATE CIRCULAR RING
+    // =========================
+
+    const circumference = 326.73;
+
+    const offset =
+        circumference * (1 - remainingPercent);
+
+    if (mealProgressBar) {
+        mealProgressBar.style.strokeDasharray = circumference;
+        mealProgressBar.style.strokeDashoffset = offset;
+    }
+
+
+    // =========================
+    // UPDATE COUNTDOWN
+    // =========================
+
+    if (mealProgressPercent) {
+        mealProgressPercent.textContent =
+            formatMealCountdown(remainingTime);
+    }
+
+
+    // =========================
+    // UPDATE MEAL EMOJI
+    // =========================
+
+    if (timerEmoji) {
+        timerEmoji.textContent = activeMeal.emoji;
+    }
+
+
+    // =========================
+    // DYNAMIC REACTIONS
+    // =========================
+
+    if (remainingPercent > 0.70) {
+
+        timerReaction.textContent = "😌";
+        timerMessageTitle.textContent = "Take your time!";
+        mealProgressLabel.textContent = "Plenty of time left";
+
+    }
+
+    else if (remainingPercent > 0.40) {
+
+        timerReaction.textContent = "🙂";
+        timerMessageTitle.textContent = "No rush!";
+        mealProgressLabel.textContent = "You still have time";
+
+    }
+
+    else if (remainingPercent > 0.20) {
+
+        timerReaction.textContent = "👀";
+        timerMessageTitle.textContent = "Don't forget!";
+        mealProgressLabel.textContent = "Meal time is moving";
+
+    }
+
+    else if (remainingPercent > 0.05) {
+
+        timerReaction.textContent = "🏃";
+        timerMessageTitle.textContent = "Hurry up!";
+        mealProgressLabel.textContent = "Closing soon";
+
+    }
+
+    else {
+
+        timerReaction.textContent = "🚨";
+        timerMessageTitle.textContent = "Last chance!";
+        mealProgressLabel.textContent = "Run for your food!";
+    }
+
+}
+
+
+// Start timer immediately
+updateCircularMealTimer();
+
+
+// Update every second
+setInterval(updateCircularMealTimer, 1000);

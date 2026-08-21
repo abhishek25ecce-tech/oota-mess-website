@@ -39,8 +39,77 @@
     Loading date...
 </div>
 
-<div class="home-status" id="homeStatus">
-    Checking meal status...
+<div class="notification-card">
+
+    <div class="notification-icon">🔔</div>
+
+    <div class="notification-text">
+        <strong>Meal notifications</strong>
+        <span id="notificationStatus">
+            Get notified when a meal starts
+        </span>
+    </div>
+
+    <button id="notificationToggle" class="notification-toggle">
+        Enable
+    </button>
+
+</div>
+
+<div class="meal-progress-container" id="mealProgressContainer">
+    <div class="meal-timer-circle">
+
+        <svg class="timer-svg" viewBox="0 0 120 120">
+
+            <circle
+                class="timer-bg"
+                cx="60"
+                cy="60"
+                r="52"
+            />
+
+            <circle
+                class="timer-progress"
+                id="mealProgressBar"
+                cx="60"
+                cy="60"
+                r="52"
+            />
+
+        </svg>
+
+        <div class="timer-content">
+
+            <div class="timer-emoji" id="timerEmoji">🍛</div>
+
+            <div class="timer-countdown" id="mealProgressPercent">
+                --:--
+            </div>
+
+            <div class="timer-small-text">
+                LEFT
+            </div>
+
+        </div>
+
+    </div>
+
+<div class="meal-timer-message">
+
+    <div class="timer-reaction" id="timerReaction">
+        😌
+    </div>
+
+    <div class="timer-message-title" id="timerMessageTitle">
+        Take your time!
+    </div>
+
+    <div class="meal-progress-label" id="mealProgressLabel">
+        Plenty of time left
+    </div>
+
+</div>
+
 </div>
 <div class="food-vibe-box">
 
