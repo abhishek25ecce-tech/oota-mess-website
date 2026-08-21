@@ -749,3 +749,85 @@ updateCircularMealTimer();
 
 // Update every second
 setInterval(updateCircularMealTimer, 1000);
+// =========================
+// MEAL NOTIFICATIONS
+// =========================
+
+const notificationToggle =
+    document.getElementById("notificationToggle");
+
+const notificationStatus =
+    document.getElementById("notificationStatus");
+
+function updateNotificationUI() {
+
+    if (!notificationToggle || !notificationStatus) return;
+
+    if (Notification.permission === "granted") {
+
+        notificationToggle.textContent = "Enabled 🔔";
+        notificationStatus.textContent =
+            "You'll be notified when meals start";
+
+        notificationToggle.classList.add("notifications-enabled");
+
+    } else {
+
+        notificationToggle.textContent = "Enable";
+        notificationStatus.textContent =
+            "Get notified when a meal starts";
+
+        notificationToggle.classList.remove("notifications-enabled");
+    }
+}
+
+
+if (notificationToggle) {
+
+    notificationToggle.addEventListener("click", async () => {
+
+        // Browser does not support notifications
+        if (!("Notification" in window)) {
+            alert("Your browser does not support notifications.");
+            return;
+        }
+
+        // Ask permission
+        if (Notification.permission === "default") {
+
+            const permission =
+                await Notification.requestPermission();
+
+            if (permission === "granted") {
+
+                alert("Meal notifications enabled! 🔔");
+
+            } else {
+
+                alert("Notification permission was not allowed.");
+            }
+        }
+
+        // Permission already granted
+        else if (Notification.permission === "granted") {
+
+            alert("Meal notifications are already enabled 🔔");
+        }
+
+        // Permission blocked
+        else {
+
+            alert(
+                "Notifications are blocked. Please enable them in your browser settings."
+            );
+        }
+
+        updateNotificationUI();
+
+    });
+
+}
+
+
+// Set correct button state when page loads
+updateNotificationUI();
