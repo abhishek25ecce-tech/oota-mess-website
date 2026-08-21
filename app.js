@@ -759,21 +759,44 @@ const notificationToggle =
 const notificationStatus =
     document.getElementById("notificationStatus");
 
+
 function updateNotificationUI() {
 
     if (!notificationToggle || !notificationStatus) return;
 
+    // Check browser support first
+    if (!("Notification" in window)) {
+
+        notificationToggle.textContent = "Not supported";
+
+        notificationStatus.textContent =
+            "Notifications are not supported in this browser.";
+
+        return;
+    }
+
     if (Notification.permission === "granted") {
 
         notificationToggle.textContent = "Enabled 🔔";
+
         notificationStatus.textContent =
             "You'll be notified when meals start";
 
         notificationToggle.classList.add("notifications-enabled");
 
+    } else if (Notification.permission === "denied") {
+
+        notificationToggle.textContent = "Blocked";
+
+        notificationStatus.textContent =
+            "Notifications are blocked in browser settings.";
+
+        notificationToggle.classList.remove("notifications-enabled");
+
     } else {
 
         notificationToggle.textContent = "Enable";
+
         notificationStatus.textContent =
             "Get notified when a meal starts";
 
@@ -784,50 +807,71 @@ function updateNotificationUI() {
 
 if (notificationToggle) {
 
-    notificationToggle.addEventListener("click", async () => {
+    notificationToggle.addEventListener("click", function () {
 
-        // Browser does not support notifications
+        // Check support
         if (!("Notification" in window)) {
-            alert("Your browser does not support notifications.");
+
+            notificationStatus.textContent =
+                "Notifications are not supported in this browser.";
+
             return;
         }
 
-        // Ask permission
-        if (Notification.permission === "default") {
 
-            const permission =
-                await Notification.requestPermission();
+        // Already enabled
+        if (Notification.permission === "granted") {
 
-            if (permission === "granted") {
+            notificationStatus.textContent =
+                "Meal notifications are already enabled 🔔";
 
-                alert("Meal notifications enabled! 🔔");
-
-            } else {
-
-                alert("Notification permission was not allowed.");
-            }
+            return;
         }
 
-        // Permission already granted
-        else if (Notification.permission === "granted") {
 
-            alert("Meal notifications are already enabled 🔔");
+        // Already blocked
+        if (Notification.permission === "denied") {
+
+            notificationStatus.textContent =
+                "Please allow notifications in your browser settings.";
+
+            return;
         }
 
-        // Permission blocked
-        else {
 
-            alert(
-                "Notifications are blocked. Please enable them in your browser settings."
-            );
-        }
+        // Ask for permission
+        Notification.requestPermission()
+            .then(function (permission) {
 
-        updateNotificationUI();
+                if (permission === "granted") {
+
+                    notificationStatus.textContent =
+                        "Meal notifications enabled! 🔔";
+
+                } else {
+
+                    notificationStatus.textContent =
+                        "Notification permission was not allowed.";
+                }
+
+                updateNotificationUI();
+
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "Notification permission error:",
+                    error
+                );
+
+                notificationStatus.textContent =
+                    "Could not enable notifications.";
+            });
 
     });
 
 }
 
 
-// Set correct button state when page loads
+// Set correct state when page loads
 updateNotificationUI();
