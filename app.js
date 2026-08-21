@@ -476,10 +476,13 @@ vibeButtons.forEach(button => {
 
             button.classList.add("selected-vibe");
 
-            // Temporarily show selected emoji
+            // Show selected emoji immediately
             if (dominantVibe) {
                 dominantVibe.textContent = emoji;
             }
+
+            // Change message according to selected emoji
+            updateVibeMessage(emoji);
 
             // Reload actual dominant emoji
             setTimeout(loadFoodVibe, 1000);
@@ -492,8 +495,9 @@ vibeButtons.forEach(button => {
             button.disabled = false;
         });
 
-    });
-});
+    }); // closes button.addEventListener
+
+}); // closes vibeButtons.forEach
 
 
 // =========================
@@ -528,7 +532,7 @@ function loadFoodVibe() {
 
         if (dominantEmoji) {
             dominantVibe.textContent = dominantEmoji;
-            updateVibeMessage(emoji);
+            updateVibeMessage(dominantEmoji);
         }
 
     })
