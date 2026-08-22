@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="css/style.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2e7d32">
+    <link rel="apple-touch-icon" href="icons/icon-192.png"> 
 </head>
 
 <body>
@@ -55,6 +58,10 @@
     </button>
 
 </div>
+
+<button id="installButton" class="install-button" style="display: none;">
+    📲 Install Oota
+</button>
 
 <div class="meal-progress-container" id="mealProgressContainer">
     <div class="meal-timer-circle">
@@ -199,6 +206,59 @@
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="app.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js")
+            .then(() => {
+                console.log("Oota service worker registered!");
+            })
+            .catch(error => {
+                console.error("Service worker registration failed:", error);
+            });
+    });
+}
+</script>
+
+<!-- INSTALL OOTA -->
+<script>
+
+let deferredPrompt;
+
+const installButton = document.getElementById("installButton");
+
+window.addEventListener("beforeinstallprompt", (event) => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    if (installButton) {
+        installButton.style.display = "block";
+    }
+
+});
+
+if (installButton) {
+
+    installButton.addEventListener("click", async () => {
+
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+
+        const choiceResult = await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        installButton.style.display = "none";
+
+    });
+
+}
+
+</script>
 
 </body>
 

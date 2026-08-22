@@ -1006,3 +1006,29 @@ nav a.active {
     }
 
 }
+/* =========================
+   INSTALL OOTA BUTTON
+========================= */
+
+.install-button {
+    display: block;
+    width: calc(100% - 32px);
+    max-width: 380px;
+    margin: 0 auto 22px;
+    padding: 14px 20px;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
