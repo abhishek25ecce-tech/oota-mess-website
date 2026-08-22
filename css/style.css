@@ -991,3 +991,18 @@ nav a.active {
 
     border-radius: 14px;
 }
+/* =========================
+   MOBILE BOTTOM SPACING FIX
+========================= */
+
+@media (max-width: 600px) {
+
+    .today {
+        padding-bottom: 100px;
+    }
+
+    .meal-card:last-child {
+        margin-bottom: 30px;
+    }
+
+}
