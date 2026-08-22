@@ -759,44 +759,31 @@ const notificationToggle =
 const notificationStatus =
     document.getElementById("notificationStatus");
 
-
 function updateNotificationUI() {
 
     if (!notificationToggle || !notificationStatus) return;
 
-    // Check browser support first
     if (!("Notification" in window)) {
 
         notificationToggle.textContent = "Not supported";
-
         notificationStatus.textContent =
-            "Notifications are not supported in this browser.";
+            "Notifications are not supported in this browser";
 
+        notificationToggle.disabled = true;
         return;
     }
 
     if (Notification.permission === "granted") {
 
         notificationToggle.textContent = "Enabled 🔔";
-
         notificationStatus.textContent =
             "You'll be notified when meals start";
 
         notificationToggle.classList.add("notifications-enabled");
 
-    } else if (Notification.permission === "denied") {
-
-        notificationToggle.textContent = "Blocked";
-
-        notificationStatus.textContent =
-            "Notifications are blocked in browser settings.";
-
-        notificationToggle.classList.remove("notifications-enabled");
-
     } else {
 
         notificationToggle.textContent = "Enable";
-
         notificationStatus.textContent =
             "Get notified when a meal starts";
 
@@ -807,73 +794,147 @@ function updateNotificationUI() {
 
 if (notificationToggle) {
 
-    notificationToggle.addEventListener("click", function () {
+    notificationToggle.addEventListener("click", async () => {
 
-        // Check support
         if (!("Notification" in window)) {
-
-            notificationStatus.textContent =
-                "Notifications are not supported in this browser.";
-
+            alert("Your browser does not support notifications.");
             return;
         }
 
+        if (Notification.permission === "default") {
 
-        // Already enabled
-        if (Notification.permission === "granted") {
+            const permission =
+                await Notification.requestPermission();
 
-            notificationStatus.textContent =
-                "Meal notifications are already enabled 🔔";
+            if (permission === "granted") {
 
-            return;
-        }
-
-
-        // Already blocked
-        if (Notification.permission === "denied") {
-
-            notificationStatus.textContent =
-                "Please allow notifications in your browser settings.";
-
-            return;
-        }
-
-
-        // Ask for permission
-        Notification.requestPermission()
-            .then(function (permission) {
-
-                if (permission === "granted") {
-
-                    notificationStatus.textContent =
-                        "Meal notifications enabled! 🔔";
-
-                } else {
-
-                    notificationStatus.textContent =
-                        "Notification permission was not allowed.";
-                }
-
-                updateNotificationUI();
-
-            })
-            .catch(function (error) {
-
-                console.error(
-                    "Notification permission error:",
-                    error
+                localStorage.setItem(
+                    "mealNotificationsEnabled",
+                    "true"
                 );
 
-                notificationStatus.textContent =
-                    "Could not enable notifications.";
-            });
+                alert("Meal notifications enabled! 🔔");
+
+            } else {
+
+                alert("Notification permission was not allowed.");
+            }
+
+        } else if (Notification.permission === "granted") {
+
+            localStorage.setItem(
+                "mealNotificationsEnabled",
+                "true"
+            );
+
+            alert("Meal notifications are enabled 🔔");
+
+        } else {
+
+            alert(
+                "Notifications are blocked. Please enable them in your browser settings."
+            );
+        }
+
+        updateNotificationUI();
 
     });
 
 }
 
 
-// Set correct state when page loads
+// =========================
+// MEAL START NOTIFICATIONS
+// =========================
+
+const mealNotificationTimes = [
+    {
+        name: "Breakfast",
+        time: "07:00",
+        emoji: "🍳"
+    },
+    {
+        name: "Lunch",
+        time: "12:00",
+        emoji: "🍛"
+    },
+    {
+        name: "Snacks",
+        time: "16:30",
+        emoji: "☕"
+    },
+    {
+        name: "Dinner",
+        time: "19:00",
+        emoji: "🍽️"
+    }
+];
+
+
+function checkMealNotifications() {
+
+    // Notifications must be enabled
+    if (
+        localStorage.getItem("mealNotificationsEnabled") !== "true"
+    ) {
+        return;
+    }
+
+    // Browser permission must be granted
+    if (Notification.permission !== "granted") {
+        return;
+    }
+
+    const now = new Date();
+
+    const currentHours =
+        String(now.getHours()).padStart(2, "0");
+
+    const currentMinutes =
+        String(now.getMinutes()).padStart(2, "0");
+
+    const currentTime =
+        `${currentHours}:${currentMinutes}`;
+
+    const today =
+        now.toLocaleDateString("en-CA");
+
+    mealNotificationTimes.forEach(meal => {
+
+        if (currentTime === meal.time) {
+
+            // Prevent duplicate notification
+            const notificationKey =
+                `mealNotification_${today}_${meal.name}`;
+
+            if (localStorage.getItem(notificationKey)) {
+                return;
+            }
+
+            new Notification(
+                `${meal.emoji} ${meal.name} is now being served!`,
+                {
+                    body: `Your ${meal.name.toLowerCase()} is ready. Enjoy your meal! 🍽️`
+                }
+            );
+
+            // Mark as sent
+            localStorage.setItem(
+                notificationKey,
+                "sent"
+            );
+        }
+
+    });
+
+}
+
+
+// Check every 10 seconds
+setInterval(checkMealNotifications, 10000);
+
+
+// Set correct button state when page loads
 updateNotificationUI();
 // =========================
 // COLLAPSIBLE MEAL CARDS
