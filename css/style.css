@@ -1032,3 +1032,116 @@ nav a.active {
 
     cursor: pointer;
 }
+/* =========================
+   iOS INSTALL POPUP
+========================= */
+
+.ios-install-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.ios-install-box {
+    position: relative;
+
+    width: 100%;
+    max-width: 380px;
+
+    padding: 28px 22px;
+
+    border-radius: 26px;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    text-align: center;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.ios-install-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.ios-install-box h3 {
+    margin: 5px 0 10px;
+}
+
+.ios-install-box p {
+    opacity: 0.7;
+    margin-bottom: 18px;
+}
+
+.ios-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    text-align: left;
+
+    padding: 12px;
+    margin-bottom: 8px;
+
+    border-radius: 14px;
+
+    background: #f5f5f5;
+
+    font-size: 14px;
+}
+
+.ios-step span {
+    min-width: 26px;
+    height: 26px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2e7d32;
+    color: white;
+
+    font-weight: 700;
+}
+
+.ios-got-it {
+    width: 100%;
+
+    margin-top: 12px;
+    padding: 13px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: #2e7d32;
+    color: white;
+
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.ios-close-button {
+    position: absolute;
+
+    top: 10px;
+    right: 14px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 28px;
+    cursor: pointer;
+}

@@ -62,6 +62,42 @@
 <button id="installButton" class="install-button" style="display: none;">
     📲 Install Oota
 </button>
+<div id="iosInstallPopup" class="ios-install-popup" style="display: none;">
+
+    <div class="ios-install-box">
+
+        <button id="closeIosInstall" class="ios-close-button">
+            ×
+        </button>
+
+        <div class="ios-install-icon">📱</div>
+
+        <h3>Add Oota to your Home Screen</h3>
+
+        <p>To use Oota like an app:</p>
+
+        <div class="ios-step">
+            <span>1</span>
+            Tap the <strong>Share ⬆️</strong> button in Safari.
+        </div>
+
+        <div class="ios-step">
+            <span>2</span>
+            Scroll and tap <strong>Add to Home Screen</strong>.
+        </div>
+
+        <div class="ios-step">
+            <span>3</span>
+            Keep <strong>Open as Web App</strong> enabled and tap <strong>Add</strong>.
+        </div>
+
+        <button id="iosGotIt" class="ios-got-it">
+            Got it 👍
+        </button>
+
+    </div>
+
+</div>
 
 <div class="meal-progress-container" id="mealProgressContainer">
     <div class="meal-timer-circle">
@@ -223,59 +259,127 @@ if ("serviceWorker" in navigator) {
 
 <!-- INSTALL OOTA -->
 <script>
-
 let deferredPrompt;
 
-const installButton = document.getElementById("installButton");
+const installButton =
+    document.getElementById("installButton");
 
-window.addEventListener("beforeinstallprompt", (event) => {
+const iosInstallPopup =
+    document.getElementById("iosInstallPopup");
 
-    event.preventDefault();
+const closeIosInstall =
+    document.getElementById("closeIosInstall");
 
-    deferredPrompt = event;
+const iosGotIt =
+    document.getElementById("iosGotIt");
 
-    if (installButton) {
-        installButton.style.display = "block";
-    }
 
-});
+/* Detect iPhone / iPad */
 
-if (installButton) {
-
-    installButton.addEventListener("click", async () => {
-
-        if (!deferredPrompt) return;
-
-        deferredPrompt.prompt();
-
-        const choiceResult = await deferredPrompt.userChoice;
-
-        deferredPrompt = null;
-
-        installButton.style.display = "none";
-
-    });
-
-}
-
-</script>
-
-<!-- INSTALL OOTA -->
-<script>
-
-let deferredPrompt;
-
-const installButton = document.getElementById("installButton");
-
-/* Detect iPhone / iPad Safari */
 const isIOS =
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" &&
+    navigator.maxTouchPoints > 1);
+
+
+/* Check if already installed */
 
 const isStandalone =
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone === true;
 
+
+/* =========================
+   iPHONE / iPAD
+========================= */
+
+if (isIOS && !isStandalone && installButton) {
+
+    installButton.style.display = "block";
+
+    installButton.addEventListener("click", () => {
+
+        if (iosInstallPopup) {
+            iosInstallPopup.style.display = "flex";
+        }
+
+    });
+
+}
+
+
+/* Close popup */
+
+if (closeIosInstall) {
+
+    closeIosInstall.addEventListener("click", () => {
+        iosInstallPopup.style.display = "none";
+    });
+
+}
+
+if (iosGotIt) {
+
+    iosGotIt.addEventListener("click", () => {
+        iosInstallPopup.style.display = "none";
+    });
+
+}
+
+
+/* =========================
+   ANDROID / CHROME
+========================= */
+
+window.addEventListener(
+    "beforeinstallprompt",
+    (event) => {
+
+        event.preventDefault();
+
+        deferredPrompt = event;
+
+        if (!isIOS && installButton) {
+            installButton.style.display = "block";
+        }
+
+    }
+);
+
+
+if (installButton && !isIOS) {
+
+    installButton.addEventListener(
+        "click",
+        async () => {
+
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+
+            await deferredPrompt.userChoice;
+
+            deferredPrompt = null;
+
+            installButton.style.display = "none";
+
+        }
+    );
+
+}
+
+
+/* Hide button after installation */
+
+window.addEventListener("appinstalled", () => {
+
+    if (installButton) {
+        installButton.style.display = "none";
+    }
+
+});
+</script>
+</script>
 
 /* =========================
    iPHONE / iPAD
