@@ -327,59 +327,24 @@ if (iosGotIt) {
 }
 
 
-/* =========================
-   ANDROID / CHROME
-========================= */
+<!-- INSTALL OOTA -->
+<script>
 
-window.addEventListener(
-    "beforeinstallprompt",
-    (event) => {
+let deferredPrompt;
 
-        event.preventDefault();
+const installButton = document.getElementById("installButton");
 
-        deferredPrompt = event;
+/* Detect iPhone / iPad */
+const isIOS =
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" &&
+    navigator.maxTouchPoints > 1);
 
-        if (!isIOS && installButton) {
-            installButton.style.display = "block";
-        }
+/* Check if already installed */
+const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
 
-    }
-);
-
-
-if (installButton && !isIOS) {
-
-    installButton.addEventListener(
-        "click",
-        async () => {
-
-            if (!deferredPrompt) return;
-
-            deferredPrompt.prompt();
-
-            await deferredPrompt.userChoice;
-
-            deferredPrompt = null;
-
-            installButton.style.display = "none";
-
-        }
-    );
-
-}
-
-
-/* Hide button after installation */
-
-window.addEventListener("appinstalled", () => {
-
-    if (installButton) {
-        installButton.style.display = "none";
-    }
-
-});
-</script>
-</script>
 
 /* =========================
    iPHONE / iPAD
@@ -414,7 +379,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
 
     deferredPrompt = event;
 
-    if (installButton) {
+    if (!isIOS && installButton) {
         installButton.style.display = "block";
     }
 
@@ -439,8 +404,18 @@ if (installButton && !isIOS) {
 
 }
 
+
+/* Hide button after Android installation */
+
+window.addEventListener("appinstalled", () => {
+
+    if (installButton) {
+        installButton.style.display = "none";
+    }
+
+});
+
 </script>
 
 </body>
-
 </html>
