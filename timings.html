@@ -40,7 +40,7 @@
     <strong id="nextMealName">Loading...</strong>
     <p id="nextMealCountdown">Calculating...</p>
 </div>
-    <div class="timing-card" data-start="07:00" data-end="09:30">
+    <div class="timing-card" data-start="07:30" data-end="09:30">
         <h3>🍳 Breakfast</h3>
         <p class="meal-time">7:30 AM – 9:30 AM</p>
         <div class="meal-status"></div>
@@ -58,7 +58,7 @@
         <div class="meal-status"></div>
     </div>
 
-    <div class="timing-card" data-start="19:00" data-end="21:30">
+    <div class="timing-card" data-start="19:30" data-end="21:30">
         <h3>🌙 Dinner</h3>
         <p class="meal-time">7:30 PM – 9:30 PM</p>
         <div class="meal-status"></div>
@@ -153,10 +153,10 @@ function updateNextMeal() {
     const now = new Date();
 
     const meals = [
-        { name: "🍳 Breakfast", start: getTimeToday("07:00") },
+        { name: "🍳 Breakfast", start: getTimeToday("07:30") },
         { name: "🍛 Lunch", start: getTimeToday("12:00") },
         { name: "☕ Snacks", start: getTimeToday("16:30") },
-        { name: "🌙 Dinner", start: getTimeToday("19:00") }
+        { name: "🌙 Dinner", start: getTimeToday("19:30") }
     ];
 
     let nextMeal = meals.find(meal => meal.start > now);
@@ -164,7 +164,7 @@ function updateNextMeal() {
     if (!nextMeal) {
         nextMeal = {
             name: "🍳 Breakfast",
-            start: getTimeToday("07:00")
+            start: getTimeToday("07:30")
         };
 
         nextMeal.start.setDate(nextMeal.start.getDate() + 1);
