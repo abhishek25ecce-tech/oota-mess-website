@@ -241,7 +241,7 @@ function updateHomeStatus() {
     const meals = [
         {
             name: "🍳 Breakfast",
-            start: "07:00",
+            start: "07:30",
             end: "09:30"
         },
         {
@@ -256,7 +256,7 @@ function updateHomeStatus() {
         },
         {
             name: "🌙 Dinner",
-            start: "19:00",
+            start: "19:30",
             end: "21:30"
         }
     ];
@@ -333,10 +333,10 @@ function highlightCurrentMeal() {
     const now = new Date();
 
     const meals = [
-        { card: "breakfastCard", start: "07:00", end: "09:30" },
+        { card: "breakfastCard", start: "07:30", end: "09:30" },
         { card: "lunchCard", start: "12:00", end: "14:30" },
         { card: "snacksCard", start: "16:30", end: "18:15" },
-        { card: "dinnerCard", start: "19:00", end: "21:30" }
+        { card: "dinnerCard", start: "19:30", end: "21:30" }
     ];
 
     // Remove highlight from all cards first
@@ -396,10 +396,10 @@ function getCurrentMeal() {
     const now = new Date();
 
     const meals = [
-        { name: "Breakfast", start: "07:00", end: "09:30" },
+        { name: "Breakfast", start: "07:30", end: "09:30" },
         { name: "Lunch", start: "12:00", end: "14:30" },
         { name: "Snacks", start: "16:30", end: "18:15" },
-        { name: "Dinner", start: "19:00", end: "21:30" }
+        { name: "Dinner", start: "19:30", end: "21:30" }
     ];
 
     for (const meal of meals) {
@@ -592,7 +592,7 @@ function updateCircularMealTimer() {
     const meals = [
         {
             name: "Breakfast",
-            start: "07:00",
+            start: "07:30",
             end: "09:30",
             emoji: "🍳"
         },
@@ -610,7 +610,7 @@ function updateCircularMealTimer() {
         },
         {
             name: "Dinner",
-            start: "19:00",
+            start: "19:30",
             end: "21:30",
             emoji: "🌙"
         }
@@ -850,7 +850,7 @@ if (notificationToggle) {
 const mealNotificationTimes = [
     {
         name: "Breakfast",
-        time: "07:00",
+        time: "07:30",
         emoji: "🍳"
     },
     {
@@ -865,7 +865,7 @@ const mealNotificationTimes = [
     },
     {
         name: "Dinner",
-        time: "19:00",
+        time: "19:30",
         emoji: "🍽️"
     }
 ];
@@ -953,3 +953,79 @@ mealCards.forEach(card => {
     });
 
 });
+// =========================
+// MEAL START NOTIFICATIONS
+// =========================
+
+const mealNotificationTimes = {
+    breakfast: "07:30",
+    lunch: "12:00",
+    snacks: "16:30",
+    dinner: "19:30"
+};
+
+
+function checkMealNotifications() {
+
+    // Only continue if notifications are allowed
+    if (!("Notification" in window)) return;
+
+    if (Notification.permission !== "granted") return;
+
+
+    const now = new Date();
+
+    const currentTime =
+        String(now.getHours()).padStart(2, "0") +
+        ":" +
+        String(now.getMinutes()).padStart(2, "0");
+
+
+    for (const meal in mealNotificationTimes) {
+
+        const mealTime = mealNotificationTimes[meal];
+
+        if (currentTime === mealTime) {
+
+            // Prevent duplicate notifications
+            const notificationKey =
+                `oota-${meal}-${now.toDateString()}`;
+
+            if (localStorage.getItem(notificationKey)) {
+                continue;
+            }
+
+
+            const mealNames = {
+                breakfast: "🍳 Breakfast",
+                lunch: "🍛 Lunch",
+                snacks: "☕ Snacks",
+                dinner: "🌙 Dinner"
+            };
+
+
+            new Notification(
+                `Oota: ${mealNames[meal]} is ready! 🍽️`,
+                {
+                    body: "Your meal service has started. Enjoy your food!",
+                    icon: "icons/icon-192.png"
+                }
+            );
+
+
+            // Remember that notification was sent today
+            localStorage.setItem(notificationKey, "sent");
+
+        }
+
+    }
+
+}
+
+
+// Check every 10 seconds
+setInterval(checkMealNotifications, 10000);
+
+
+// Also check immediately when page opens
+checkMealNotifications();
