@@ -975,3 +975,15 @@ if (closeElectionPopup) {
     });
 
 }
+/* =========================
+   ELECTION POPUP CLOSE
+========================= */
+
+const electionPopup = document.getElementById("electionPopup");
+const closeElectionPopup = document.getElementById("closeElectionPopup");
+
+if (closeElectionPopup) {
+    closeElectionPopup.addEventListener("click", () => {
+        electionPopup.style.display = "none";
+    });
+}
