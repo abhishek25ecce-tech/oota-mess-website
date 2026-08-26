@@ -325,54 +325,9 @@ if (iosGotIt) {
     });
 
 }
-
-
-<!-- INSTALL OOTA -->
-<script>
-
-let deferredPrompt;
-
-const installButton = document.getElementById("installButton");
-
-/* Detect iPhone / iPad */
-const isIOS =
-    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" &&
-    navigator.maxTouchPoints > 1);
-
-/* Check if already installed */
-const isStandalone =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone === true;
-
-
-/* =========================
-   iPHONE / iPAD
-========================= */
-
-if (isIOS && !isStandalone && installButton) {
-
-    installButton.style.display = "block";
-
-    installButton.addEventListener("click", () => {
-
-        alert(
-            "To install Oota on your iPhone:\n\n" +
-            "1. Tap the Share button ⬆️ in Safari\n\n" +
-            "2. Scroll down and tap 'Add to Home Screen'\n\n" +
-            "3. Tap 'Add'\n\n" +
-            "Oota will then appear like an app on your Home Screen! 🍽️"
-        );
-
-    });
-
-}
-
-
 /* =========================
    ANDROID / CHROME / EDGE
 ========================= */
-
 window.addEventListener("beforeinstallprompt", (event) => {
 
     event.preventDefault();
@@ -403,7 +358,6 @@ if (installButton && !isIOS) {
     });
 
 }
-
 
 /* Hide button after Android installation */
 
