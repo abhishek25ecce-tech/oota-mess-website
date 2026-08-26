@@ -407,12 +407,14 @@ window.addEventListener("appinstalled", () => {
 </script>
 
 <!-- ELECTION POPUP -->
-<div id="electionPopup" class="election-popup" style="display: none;">
+<!-- ELECTION POPUP -->
+<div id="electionPopup" class="election-popup">
 
     <div class="election-popup-content">
 
-        <button id="closeElectionPopup"
-                class="close-election-popup">
+        <button
+            class="close-election-popup"
+            onclick="document.getElementById('electionPopup').style.display='none'">
             ×
         </button>
 
