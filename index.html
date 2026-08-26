@@ -279,8 +279,10 @@ const iosGotIt =
 
 const isIOS =
     /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" &&
-    navigator.maxTouchPoints > 1);
+    (
+        navigator.platform === "MacIntel" &&
+        navigator.maxTouchPoints > 1
+    );
 
 
 /* Check if already installed */
@@ -309,57 +311,85 @@ if (isIOS && !isStandalone && installButton) {
 }
 
 
-/* Close iPhone popup */
+/* Close iOS popup */
 
 if (closeIosInstall) {
 
     closeIosInstall.addEventListener("click", () => {
-        iosInstallPopup.style.display = "none";
+
+        if (iosInstallPopup) {
+            iosInstallPopup.style.display = "none";
+        }
+
     });
 
 }
 
+
 if (iosGotIt) {
 
     iosGotIt.addEventListener("click", () => {
-        iosInstallPopup.style.display = "none";
+
+        if (iosInstallPopup) {
+            iosInstallPopup.style.display = "none";
+        }
+
     });
 
 }
 
 
 /* =========================
-   ANDROID / CHROME
+   ANDROID / CHROME / EDGE
 ========================= */
 
-window.addEventListener("beforeinstallprompt", (event) => {
+window.addEventListener(
+    "beforeinstallprompt",
+    (event) => {
 
-    event.preventDefault();
+        event.preventDefault();
 
-    deferredPrompt = event;
+        deferredPrompt = event;
 
-    if (!isIOS && installButton) {
-        installButton.style.display = "block";
+        if (
+            !isIOS &&
+            !isStandalone &&
+            installButton
+        ) {
+            installButton.style.display = "block";
+        }
+
     }
+);
 
-});
 
+/* Android install button */
 
 if (installButton && !isIOS) {
 
-    installButton.addEventListener("click", async () => {
+    installButton.addEventListener(
+        "click",
+        async () => {
 
-        if (!deferredPrompt) return;
+            if (!deferredPrompt) {
 
-        deferredPrompt.prompt();
+                alert(
+                    "Install is not ready yet. Please refresh the page and try again."
+                );
 
-        await deferredPrompt.userChoice;
+                return;
+            }
 
-        deferredPrompt = null;
+            deferredPrompt.prompt();
 
-        installButton.style.display = "none";
+            await deferredPrompt.userChoice;
 
-    });
+            deferredPrompt = null;
+
+            installButton.style.display = "none";
+
+        }
+    );
 
 }
 

@@ -844,6 +844,33 @@ if (notificationToggle) {
     });
 
 }
+// =========================
+// MEAL NOTIFICATION TIMES
+// =========================
+
+const mealNotificationTimes = [
+    {
+        name: "Breakfast",
+        time: "07:30",
+        emoji: "🍳"
+    },
+    {
+        name: "Lunch",
+        time: "12:00",
+        emoji: "🍛"
+    },
+    {
+        name: "Snacks",
+        time: "16:30",
+        emoji: "☕"
+    },
+    {
+        name: "Dinner",
+        time: "19:30",
+        emoji: "🌙"
+    }
+];
+
 
 function checkMealNotifications() {
 
