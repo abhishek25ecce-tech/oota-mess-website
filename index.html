@@ -259,14 +259,11 @@ if ("serviceWorker" in navigator) {
 
 <!-- INSTALL OOTA -->
 <script>
+
 let deferredPrompt;
 
 const installButton =
     document.getElementById("installButton");
-    
-if (installButton) {
-    installButton.style.display = "block";
-}    
 
 const iosInstallPopup =
     document.getElementById("iosInstallPopup");
@@ -312,7 +309,7 @@ if (isIOS && !isStandalone && installButton) {
 }
 
 
-/* Close popup */
+/* Close iPhone popup */
 
 if (closeIosInstall) {
 
@@ -330,8 +327,9 @@ if (iosGotIt) {
 
 }
 
+
 /* =========================
-   ANDROID / CHROME / EDGE
+   ANDROID / CHROME
 ========================= */
 
 window.addEventListener("beforeinstallprompt", (event) => {
@@ -365,7 +363,8 @@ if (installButton && !isIOS) {
 
 }
 
-/* Hide button after Android installation */
+
+/* Hide button after installation */
 
 window.addEventListener("appinstalled", () => {
 
