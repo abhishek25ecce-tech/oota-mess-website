@@ -263,6 +263,10 @@ let deferredPrompt;
 
 const installButton =
     document.getElementById("installButton");
+    
+if (installButton) {
+    installButton.style.display = "block";
+}    
 
 const iosInstallPopup =
     document.getElementById("iosInstallPopup");
@@ -325,9 +329,11 @@ if (iosGotIt) {
     });
 
 }
+
 /* =========================
    ANDROID / CHROME / EDGE
 ========================= */
+
 window.addEventListener("beforeinstallprompt", (event) => {
 
     event.preventDefault();
