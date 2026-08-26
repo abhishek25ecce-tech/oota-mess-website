@@ -812,7 +812,10 @@ if (notificationToggle) {
                     "mealNotificationsEnabled",
                     "true"
                 );
-
+                new Notification("🔔 Oota Test", {
+                body: "Notifications are working!"
+                });
+                
                 alert("Meal notifications enabled! 🔔");
 
             } else {
@@ -841,35 +844,6 @@ if (notificationToggle) {
     });
 
 }
-
-
-// =========================
-// MEAL START NOTIFICATIONS
-// =========================
-
-const mealNotificationTimes = [
-    {
-        name: "Breakfast",
-        time: "07:30",
-        emoji: "🍳"
-    },
-    {
-        name: "Lunch",
-        time: "12:00",
-        emoji: "🍛"
-    },
-    {
-        name: "Snacks",
-        time: "16:30",
-        emoji: "☕"
-    },
-    {
-        name: "Dinner",
-        time: "19:30",
-        emoji: "🍽️"
-    }
-];
-
 
 function checkMealNotifications() {
 
@@ -953,79 +927,3 @@ mealCards.forEach(card => {
     });
 
 });
-// =========================
-// MEAL START NOTIFICATIONS
-// =========================
-
-const mealNotificationTimes = {
-    breakfast: "07:30",
-    lunch: "12:00",
-    snacks: "16:30",
-    dinner: "19:30"
-};
-
-
-function checkMealNotifications() {
-
-    // Only continue if notifications are allowed
-    if (!("Notification" in window)) return;
-
-    if (Notification.permission !== "granted") return;
-
-
-    const now = new Date();
-
-    const currentTime =
-        String(now.getHours()).padStart(2, "0") +
-        ":" +
-        String(now.getMinutes()).padStart(2, "0");
-
-
-    for (const meal in mealNotificationTimes) {
-
-        const mealTime = mealNotificationTimes[meal];
-
-        if (currentTime === mealTime) {
-
-            // Prevent duplicate notifications
-            const notificationKey =
-                `oota-${meal}-${now.toDateString()}`;
-
-            if (localStorage.getItem(notificationKey)) {
-                continue;
-            }
-
-
-            const mealNames = {
-                breakfast: "🍳 Breakfast",
-                lunch: "🍛 Lunch",
-                snacks: "☕ Snacks",
-                dinner: "🌙 Dinner"
-            };
-
-
-            new Notification(
-                `Oota: ${mealNames[meal]} is ready! 🍽️`,
-                {
-                    body: "Your meal service has started. Enjoy your food!",
-                    icon: "icons/icon-192.png"
-                }
-            );
-
-
-            // Remember that notification was sent today
-            localStorage.setItem(notificationKey, "sent");
-
-        }
-
-    }
-
-}
-
-
-// Check every 10 seconds
-setInterval(checkMealNotifications, 10000);
-
-
-// Also check immediately when page opens
-checkMealNotifications();
