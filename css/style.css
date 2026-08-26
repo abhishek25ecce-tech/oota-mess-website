@@ -941,8 +941,24 @@ nav a:active {
 }
 
 .meal-arrow {
-    font-size: 24px;
-    transition: transform 0.3s ease;
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
+
+    transition: transform 0.35s ease;
+    flex-shrink: 0;
 }
 
 /* Hidden by default */
@@ -966,8 +982,10 @@ nav a:active {
 /* Rotate arrow */
 .meal-card.open .meal-arrow {
     transform: rotate(180deg);
-}
-/* =========================
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.12);
+}/* =========================
    ACTIVE GLASS NAV TAB
 ========================= */
 
