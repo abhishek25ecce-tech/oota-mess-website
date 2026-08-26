@@ -958,7 +958,7 @@ nav a:active {
 
 /* Open state */
 .meal-card.open .meal-card-content {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
     margin-top: 12px;
 }
@@ -1144,4 +1144,64 @@ nav a.active {
 
     font-size: 28px;
     cursor: pointer;
+}
+/* =========================
+   ELECTION POPUP
+========================= */
+
+.election-popup {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    z-index: 9999;
+
+    padding: 20px;
+}
+
+.election-popup-content {
+    position: relative;
+
+    max-width: 500px;
+    width: 100%;
+
+    max-height: 90vh;
+}
+
+.election-popup-content img {
+    width: 100%;
+    max-height: 90vh;
+
+    object-fit: contain;
+
+    display: block;
+
+    border-radius: 12px;
+}
+
+.close-election-popup {
+    position: absolute;
+
+    top: -12px;
+    right: -12px;
+
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: white;
+
+    font-size: 30px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    z-index: 2;
 }
