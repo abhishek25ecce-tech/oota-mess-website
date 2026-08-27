@@ -812,9 +812,12 @@ if (notificationToggle) {
                     "mealNotificationsEnabled",
                     "true"
                 );
-                new Notification("🔔 Oota Test", {
-                body: "Notifications are working!"
-                });
+navigator.serviceWorker.ready.then(registration => {
+    registration.showNotification("🔔 Oota Test", {
+        body: "Notifications are working!",
+        icon: "icons/icon-192.png"
+    });
+});
                 
                 alert("Meal notifications enabled! 🔔");
 
@@ -912,13 +915,18 @@ function checkMealNotifications() {
                 return;
             }
 
-            new Notification(
-                `${meal.emoji} ${meal.name} is now being served!`,
-                {
-                    body: `Your ${meal.name.toLowerCase()} is ready. Enjoy your meal! 🍽️`
-                }
-            );
+navigator.serviceWorker.ready.then(registration => {
 
+    registration.showNotification(
+        `${meal.emoji} ${meal.name} is now being served!`,
+        {
+            body: `Your ${meal.name.toLowerCase()} is ready. Enjoy your meal! 🍽️`,
+            icon: "icons/icon-192.png",
+            badge: "icons/icon-192.png"
+        }
+    );
+
+});
             // Mark as sent
             localStorage.setItem(
                 notificationKey,
