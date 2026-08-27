@@ -955,3 +955,48 @@ mealCards.forEach(card => {
 
 });
 
+// =========================
+// INSTALL OOTA
+// =========================
+
+let deferredPrompt;
+
+const installButton = document.getElementById("installButton");
+
+window.addEventListener("beforeinstallprompt", (event) => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    if (installButton) {
+        installButton.style.display = "block";
+    }
+
+});
+
+if (installButton) {
+
+    installButton.addEventListener("click", async () => {
+
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        installButton.style.display = "none";
+
+    });
+
+}
+
+window.addEventListener("appinstalled", () => {
+
+    if (installButton) {
+        installButton.style.display = "none";
+    }
+
+});

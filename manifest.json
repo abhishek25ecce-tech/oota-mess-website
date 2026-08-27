@@ -7,14 +7,15 @@
   "background_color": "#f5f5f5",
   "theme_color": "#2e7d32",
   "orientation": "portrait-primary",
+
   "icons": [
     {
-      "src": "Oota_icon_192_blue",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "Oota_icon_512_blue",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

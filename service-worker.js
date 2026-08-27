@@ -1,4 +1,4 @@
-const CACHE_NAME = "oota-v1";
+const CACHE_NAME = "oota-v2";
 
 const ASSETS_TO_CACHE = [
     "./",
@@ -7,7 +7,9 @@ const ASSETS_TO_CACHE = [
     "./timings.html",
     "./css/style.css",
     "./app.js",
-    "./manifest.json"
+    "./manifest.json",
+    "./icons/icon-192.png",
+    "./icons/icon-512.png"
 ];
 
 self.addEventListener("install", event => {
